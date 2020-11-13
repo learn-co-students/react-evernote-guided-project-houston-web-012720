@@ -11,12 +11,12 @@ import Instructions from './Instructions';
           refactor to get this Content component to work.
 */
 class Content extends Component {
-
-
   renderContent = () => {
     if (this.props.isEditing) {
       return <NoteEditor
-        displayNote={this.props.displayNote} />;
+        displayNote={this.props.displayNote}
+        onCancelClick={this.props.onCancelClick}
+        updateDisplayNotes={this.props.updateDisplayNotes} />;
     } else if (this.props.displayNote) {
       return <NoteViewer
         displayNote={this.props.displayNote}

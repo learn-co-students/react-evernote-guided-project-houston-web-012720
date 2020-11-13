@@ -8,7 +8,8 @@ class Sidebar extends Component {
         style={{height: 'calc(100vh - 242px)', overflow: 'auto'}}
         >
         <NoteList
-          notes={this.props.notes}
+          // notes={this.props.notes}
+          displayNotes={this.props.displayNotes}
           onNoteClick={this.props.onNoteClick} />
         <button>New</button>
       </div>

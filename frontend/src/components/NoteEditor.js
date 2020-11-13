@@ -5,8 +5,8 @@ class NoteEditor extends Component {
     newNote: {...this.props.displayNote,
       // body: ...this.props.displayNote.body,
       user: {
-        id: 1,
-        name: 'newUser'
+        id: 4,
+        name: 'placido'
       }
     }
   }
@@ -22,7 +22,7 @@ class NoteEditor extends Component {
 
   handleChange = (e) => {
     // console.log(g.target.name)
-    this.setState({newNote: {
+    this.setState({newNote: {...this.state.newNote,
         [e.target.name]: e.target.value 
       }
     })
@@ -30,16 +30,27 @@ class NoteEditor extends Component {
 
   handleSave = (e) => {
     e.preventDefault()
-    this.setState({
-      newNote: {
-        title: e.target[0].value,
-        body: e.target[1].value
-      }
+
+    // debugger
+
+    fetch(`http://localhost:3000/api/v1/notes/${this.props.displayNote.id}`, {
+      method: 'PATCH',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        title: this.state.newNote.title,
+        body: this.state.newNote.body,
+        user_id: 4
+      })
     })
+
+    this.props.updateDisplayNotes('PATCH', this.state.newNote)
   }
 
   render() {
-    console.log(this.state.newNote)
+    // console.log(this.state.newNote)
     return (
       <form className="note-editor" onSubmit={(e)=>this.handleSave(e)}>
         <input type="text" name="title"
@@ -50,7 +61,7 @@ class NoteEditor extends Component {
           onChange={e=>this.handleChange(e)} />
         <div className="button-row">
           <input className="button" type="submit" value="Save" />
-          <button type="button">Cancel</button>
+          <button type="button" onClick={()=>this.props.onCancelClick()}>Cancel</button>
         </div>
       </form>
     );

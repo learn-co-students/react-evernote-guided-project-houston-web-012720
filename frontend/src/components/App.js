@@ -44,6 +44,29 @@ class App extends Component {
     this.setState({ isEditing: false });
   }
 
+  updateDisplayNotes = (type, note) => {
+    switch (type) {
+      case 'POST':
+        this.state.displayNotes.push(note)
+        this.setState({})
+        break
+      case 'PATCH':
+        const newDisplayNotes = [...this.state.displayNotes]
+        const i = newDisplayNotes.findIndex(n => n.id === note.id)
+        if (i !== -1) {
+          newDisplayNotes[i] = note
+          this.setState({
+            displayNote: note,
+            displayNotes: newDisplayNotes })
+        } else {
+          console.error("Couldn't find note")
+        }
+        break
+      default:
+        console.error('Invalid type')
+    }
+  }
+
   render() {
     return (
       <div className="app">
@@ -52,8 +75,11 @@ class App extends Component {
           notes={this.state.notes}
           onNoteClick={this.onNoteClick}
           displayNote={this.state.displayNote}
+          displayNotes={this.state.displayNotes}
           isEditing={this.state.isEditing}
-          onEditClick={this.onEditClick} />
+          onEditClick={this.onEditClick}
+          onCancelClick={this.onCancelClick}
+          updateDisplayNotes={this.updateDisplayNotes} />
       </div>
     );
   }

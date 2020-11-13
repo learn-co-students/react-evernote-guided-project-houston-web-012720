@@ -7,7 +7,7 @@ const NoteList = (props) => {
     <ul>
       {/* Render list of notes here... */}
       {/* <NoteItem /> */}
-      {props.notes.map((note) => <NoteItem
+      {props.displayNotes.map((note) => <NoteItem
         key={note.id.toString()}
         note={note}
         onNoteClick={props.onNoteClick}/>)}
