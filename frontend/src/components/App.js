@@ -7,11 +7,13 @@ class App extends Component {
     notes: [],
     displayNotes: [],
     displayNote: null,
-    isEditing: false
+    user: null,
+    isEditing: false,
+    filterStr: ''
   }
 
   componentDidMount() {
-    console.log('fetching...');
+    // console.log('fetching...');
     fetch("http://localhost:3000/api/v1/notes")
       .then(r => r.json())
       .then(notes => {
@@ -19,6 +21,7 @@ class App extends Component {
         this.setState({
           notes,
           displayNotes: notes,
+          user: notes[0].user
         });
         // console.log(this.state)
         },
@@ -44,20 +47,51 @@ class App extends Component {
     this.setState({ isEditing: false });
   }
 
+  onNewClick = () => {
+    fetch('http://localhost:3000/api/v1/notes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        title: 'Title',
+        body: 'Body',
+        user_id: this.state.user.id
+      })
+    })
+
+    this.updateDisplayNotes('POST', {
+      id: (this.state.notes[this.state.notes.length - 1].id + 1),
+      title: 'Title',
+      body: 'Body',
+      user: this.state.user
+    })
+  }
+
   updateDisplayNotes = (type, note) => {
+    const newNotes = [...this.state.notes]
+    const newDisplayNotes = [...this.state.displayNotes]
     switch (type) {
       case 'POST':
-        this.state.displayNotes.push(note)
-        this.setState({})
+        newNotes.push(note)
+        newDisplayNotes.push(note)
+        this.setState({
+          notes: newNotes,
+          displayNotes: newDisplayNotes
+        },
+        ()=>this.filterNotes(this.state.filterStr))
         break
       case 'PATCH':
-        const newDisplayNotes = [...this.state.displayNotes]
-        const i = newDisplayNotes.findIndex(n => n.id === note.id)
+        const i = this.state.notes.findIndex(n => n.id === note.id)
         if (i !== -1) {
-          newDisplayNotes[i] = note
+          newNotes[i] = note
           this.setState({
+            notes: newNotes,
             displayNote: note,
-            displayNotes: newDisplayNotes })
+            // displayNotes: newDisplayNotes
+            },
+            ()=>this.filterNotes(this.state.filterStr))
         } else {
           console.error("Couldn't find note")
         }
@@ -65,6 +99,23 @@ class App extends Component {
       default:
         console.error('Invalid type')
     }
+
+    
+  }
+
+  filterNotes = (str) => {
+    const newDisplayNotes = []
+
+    for (const note of this.state.notes) {
+      if (note.title.toUpperCase().includes(str.toUpperCase())) {
+        newDisplayNotes.push(note)
+      }
+    }
+
+    this.setState({
+      filterStr: str,
+      displayNotes: newDisplayNotes
+    })
   }
 
   render() {
@@ -76,10 +127,13 @@ class App extends Component {
           onNoteClick={this.onNoteClick}
           displayNote={this.state.displayNote}
           displayNotes={this.state.displayNotes}
+          user={this.state.user}
           isEditing={this.state.isEditing}
           onEditClick={this.onEditClick}
           onCancelClick={this.onCancelClick}
-          updateDisplayNotes={this.updateDisplayNotes} />
+          updateDisplayNotes={this.updateDisplayNotes}
+          onNewClick={this.onNewClick}
+          filterNotes={this.filterNotes} />
       </div>
     );
   }

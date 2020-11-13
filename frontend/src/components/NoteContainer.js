@@ -8,16 +8,17 @@ class NoteContainer extends Component {
     // console.log('NoteContainer: ' + this.props.notes)
     return (
       <Fragment>
-        <Search />
+        <Search filterNotes={this.props.filterNotes} />
         <div className='container'>
           <Sidebar
             // notes={this.props.notes}
             displayNotes={this.props.displayNotes}
-
-            onNoteClick={this.props.onNoteClick} />
+            onNoteClick={this.props.onNoteClick}
+            onNewClick={this.props.onNewClick} />
           <Content
             displayNote={this.props.displayNote}
             displayNotes={this.props.displayNotes}
+            user={this.props.user}
             isEditing={this.props.isEditing}
             onEditClick={this.props.onEditClick}
             onCancelClick={this.props.onCancelClick}

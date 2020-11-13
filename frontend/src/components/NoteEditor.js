@@ -4,10 +4,7 @@ class NoteEditor extends Component {
   state={
     newNote: {...this.props.displayNote,
       // body: ...this.props.displayNote.body,
-      user: {
-        id: 4,
-        name: 'placido'
-      }
+      user: this.props.user
     }
   }
 
@@ -42,7 +39,7 @@ class NoteEditor extends Component {
       body: JSON.stringify({
         title: this.state.newNote.title,
         body: this.state.newNote.body,
-        user_id: 4
+        user_id: this.props.user.id
       })
     })
 

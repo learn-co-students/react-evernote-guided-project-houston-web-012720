@@ -14,6 +14,7 @@ class Content extends Component {
   renderContent = () => {
     if (this.props.isEditing) {
       return <NoteEditor
+        user={this.props.user}
         displayNote={this.props.displayNote}
         onCancelClick={this.props.onCancelClick}
         updateDisplayNotes={this.props.updateDisplayNotes} />;
