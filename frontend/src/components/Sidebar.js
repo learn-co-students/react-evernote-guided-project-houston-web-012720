@@ -4,8 +4,12 @@ import NoteList from './NoteList';
 class Sidebar extends Component {
   render() {
     return (
-      <div className='master-detail-element sidebar'>
-        <NoteList />
+      <div className='master-detail-element sidebar'
+        style={{height: 'calc(100vh - 242px)', overflow: 'auto'}}
+        >
+        <NoteList
+          notes={this.props.notes}
+          onNoteClick={this.props.onNoteClick} />
         <button>New</button>
       </div>
     );

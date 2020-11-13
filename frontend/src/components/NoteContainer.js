@@ -5,12 +5,18 @@ import Content from './Content';
 
 class NoteContainer extends Component {
   render() {
+    // console.log('NoteContainer: ' + this.props.notes)
     return (
       <Fragment>
         <Search />
         <div className='container'>
-          <Sidebar />
-          <Content />
+          <Sidebar
+            notes={this.props.notes}
+            onNoteClick={this.props.onNoteClick} />
+          <Content
+            displayNote={this.props.displayNote}
+            isEditing={this.props.isEditing}
+            onEditClick={this.props.onEditClick} />
         </div>
       </Fragment>
     );
